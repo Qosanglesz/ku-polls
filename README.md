@@ -17,5 +17,8 @@ All project documents are in the [Project Wiki](../../wiki/Home).
 
 - [Vision Statement](../../wiki/Vision%20Statement)
 - [Requirements](../../wiki/Requirements)
+- [Development plan](https://github.com/Qosanglesz/ku-polls/wiki/Development-Plan)
+- [Iteration 1](https://github.com/Qosanglesz/ku-polls/wiki/Iteration-1-Plan)
+- [Task](https://github.com/users/Qosanglesz/projects/1/views/2)
 
 [django-tutorial]: TODO-write-the-django-tutorial-URL-here
