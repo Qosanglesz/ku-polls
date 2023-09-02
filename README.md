@@ -11,6 +11,12 @@ https://cpske.github.io/ISP) course at Kasetsart University.
 
 to be added.
 
+## Demo superuser
+
+|Username|Password|
+|:--:|:--:|
+|admin|admin|
+
 ## Project Documents
 
 All project documents are in the [Project Wiki](../../wiki/Home).
