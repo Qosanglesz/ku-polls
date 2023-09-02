@@ -1,8 +1,97 @@
 li a {
-    color: green;
+    color: white;
+    font-size: 30px;
+    line-height: 36px;
 }
 
 body {
     background: white url("images/background.png") no-repeat;
+    background-size: cover;
 }
 
+ul {
+    color: white;
+    font-size: 30px;
+}
+
+.Topic {
+    font-size: 24px;
+    line-height: 26px;
+    color: greenyellow;
+    text-align: center;
+    border: 5px solid white;
+    padding: 10px;
+}
+
+.Detail{
+    color: white;
+    font-size: 24px;
+    line-height: 36px;
+}
+
+#question {
+    font-size: 18px;
+    border: 5px solid white;
+    padding: 10px;
+    text-align: center;
+}
+
+#vote_btn {
+    width: 120px;
+    height: 30px;
+    font-size: 18px;
+    background-color: white;
+    color: black;
+    border: none;
+    cursor: pointer;
+}
+
+#error_msg {
+    background-color: rgb(206, 78, 78);
+    color: white;
+    font-size: 30px;
+    padding: 10px;
+    margin-bottom: 10px;
+}
+
+#available_polls {
+    color: greenyellow;
+    font-size: 22px;
+}
+
+.questionResult {
+    border: 5px solid white;
+    padding: 10px;
+    text-align: center;
+
+}
+
+.table-container {
+    display: flex;
+    align-items: center;
+    height: 20vh;
+}
+
+table {
+    color: white;
+    font-size: 30px;
+    width: 100%;
+    max-width: 600px;
+    text-align: center;
+    border-collapse: collapse;
+    border: 5px solid white;
+}
+
+.center-link a {
+    color: white;
+    font-size: 26px;
+    text-decoration: none;
+    transition: color 0.3s;
+    background-color: rgb(57, 153, 216);
+}
+
+
+.center-link a:hover {
+    color: #00ff00;
+    text-decoration: underline;
+}
