@@ -4,32 +4,35 @@ from django.shortcuts import get_object_or_404, render
 from django.urls import reverse
 from django.views import generic
 from django.utils import timezone
+from django.contrib import messages
 
 
 def vote(request, question_id):
-    question = get_object_or_404(Question, pk=question_id)
+    try:
+        question = Question.objects.get(pk=question_id)
+    except Question.DoesNotExist:
+        raise Http404("Question does not exist")
 
     # Check if the question is published
     if not question.is_published():
-        return render(request, 'polls/detail.html', {
-            'question': question,
-            'error_message': "This question is not currently published.",
-        })
+        messages.error(request, "This question is not currently published.")
+        return HttpResponseRedirect(reverse('polls:index'))
 
     try:
         selected_choice = question.choice_set.get(pk=request.POST['choice'])
     except (KeyError, Choice.DoesNotExist):
-        return render(request, 'polls/detail.html', {
-            'question': question,
-            'error_message': "You didn't select a choice.",
-        })
+        messages.error(request, "You didn't select a choice.")
+        return render(request, 'polls/detail.html', {'question': question})
     else:
+        # Check if the end date has passed
+        if question.end_date and timezone.now() > question.end_date:
+            messages.error(request, "Voting for this question is not allowed as the end date has passed.")
+            return HttpResponseRedirect(reverse('polls:index'))
+
         # Check if voting is allowed for this question
         if not question.can_vote():
-            return render(request, 'polls/detail.html', {
-                'question': question,
-                'error_message': "Voting for this question is not allowed at the moment.",
-            })
+            messages.error(request, "Voting for this question is not allowed at the moment.")
+            return HttpResponseRedirect(reverse('polls:index'))
 
         selected_choice.votes += 1
         selected_choice.save()

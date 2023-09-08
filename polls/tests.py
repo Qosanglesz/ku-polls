@@ -177,3 +177,22 @@ class QuestionIndexViewTests(TestCase):
             url = reverse('polls:detail', args=(past_question.id,))
             response = self.client.get(url)
             self.assertContains(response, past_question.question_text)
+
+    def test_redirect_when_voting_not_allowed(self):
+        """
+           Test case for verifying redirection behavior when accessing a poll's detail page.
+
+           - Creates a test question that isn't published and disallows voting.
+           - Checks if the response redirects to the polls index when expected.
+           - Verifies a 404 status code when the question doesn't exist.
+
+        """
+        question = Question.objects.create(
+            question_text="Test Question",
+            pub_date=timezone.now() + timezone.timedelta(days=1),
+        )
+        response = self.client.get(reverse('polls:detail', args=(question.id,)))
+        if question.is_published() and not question.can_vote():
+            self.assertRedirects(response, reverse('polls:index'))
+        else:
+            self.assertEqual(response.status_code, 404)
