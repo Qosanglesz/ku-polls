@@ -2,12 +2,14 @@ from django.db import models
 import datetime
 from django.utils import timezone
 
+
 class Question(models.Model):
     """
     this class represents a poll question in the web application.
     """
     question_text = models.CharField(max_length=200)
-    pub_date = models.DateTimeField('date published')
+    pub_date = models.DateTimeField("date published", default=timezone.now)
+    end_date = models.DateTimeField("date ended", null=True)
 
     def __str__(self):
         """
@@ -21,6 +23,14 @@ class Question(models.Model):
         """
         now = timezone.now()
         return now - datetime.timedelta(days=1) <= self.pub_date <= now
+
+    def is_published(self):
+        now = timezone.localdate()  # Use local date/time
+        return now >= self.pub_date.date()
+
+    def can_vote(self):
+        now = timezone.localtime()  # Use local date/time
+        return self.pub_date <= now <= (self.end_date or timezone.now())
 
 
 class Choice(models.Model):
