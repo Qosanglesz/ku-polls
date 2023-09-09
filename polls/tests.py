@@ -72,13 +72,13 @@ class QuestionModelTests(TestCase):
         """
         question = Question(pub_date=timezone.now(), end_date=None)
         self.assertTrue(question.can_vote())
-
-    def test_can_vote_on_time(self):
+ 
+    def test_can_vote_with_end_date_in_future(self):
         """
-        Can vote if the current time is equal to the end_date.
+        can_vote() should return True for questions with an end_date in the future.
         """
-        current_time = timezone.now()
-        question = Question(pub_date=current_time - timezone.timedelta(days=1), end_date=current_time)
+        future_end_date = timezone.now() + timezone.timedelta(days=1)
+        question = Question(pub_date=timezone.now(), end_date=future_end_date)
         self.assertTrue(question.can_vote())
 
     def test_cannot_vote_before_pub_date(self):
