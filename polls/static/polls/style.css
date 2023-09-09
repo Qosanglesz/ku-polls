@@ -3,6 +3,9 @@ li a {
     font-size: 30px;
     line-height: 36px;
 }
+li a:hover {
+    color: aquamarine;
+}
 
 body {
     background: white url("images/background.png") no-repeat;
@@ -21,6 +24,7 @@ ul {
     text-align: center;
     border: 5px solid white;
     padding: 10px;
+    background-color: grey;
 }
 
 .Detail{
@@ -82,16 +86,18 @@ table {
     border: 5px solid white;
 }
 
-.center-link a {
-    color: white;
-    font-size: 26px;
-    text-decoration: none;
-    transition: color 0.3s;
-    background-color: rgb(57, 153, 216);
+.result-button {
+    background-color: aquamarine;
+    color: black;
+    border: 1px solid #333;
+    padding: 5; 
+    text-decoration: none; 
+    border-radius: 5px; 
+    margin-left: 10px;
+    float: right;
 }
 
-
-.center-link a:hover {
-    color: #00ff00;
-    text-decoration: underline;
+.result-button:hover {
+    background-color: white;
 }
+

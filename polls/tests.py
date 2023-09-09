@@ -34,6 +34,61 @@ class QuestionModelTests(TestCase):
         recent_question = Question(pub_date=time)
         self.assertIs(recent_question.was_published_recently(), True)
 
+    def test_is_published_with_future(self):
+        """
+        is_published() should return False for questions with a future pub date.
+        """
+        future_pub_date = timezone.now() + datetime.timedelta(days=1)
+        question = Question(pub_date=future_pub_date)
+        self.assertFalse(question.is_published())
+
+    def test_is_published_with_now(self):
+        """
+        is_published() should return True for questions with currently time.
+        """
+        current_time = timezone.now()
+        question = Question(pub_date=current_time)
+        self.assertTrue(question.is_published())
+
+    def test_is_published_with_past(self):
+        """
+        is_published() should return True for questions with a pub date in the past.
+        """
+        past_pub_date = timezone.now() - datetime.timedelta(days=1)
+        question = Question(pub_date=past_pub_date)
+        self.assertTrue(question.is_published())
+
+    def test_cannot_vote_after_end_date(self):
+        """
+        Cannot vote if the end_date is in the past.
+        """
+        past_end_date = timezone.now() - datetime.timedelta(days=1)
+        question = Question(pub_date=timezone.now(), end_date=past_end_date)
+        self.assertFalse(question.can_vote())
+
+    def test_can_vote_null_end_date(self):
+        """
+        Can vote if end_date is Null.
+        """
+        question = Question(pub_date=timezone.now(), end_date=None)
+        self.assertTrue(question.can_vote())
+ 
+    def test_can_vote_with_end_date_in_future(self):
+        """
+        can_vote() should return True for questions with an end_date in the future.
+        """
+        future_end_date = timezone.now() + timezone.timedelta(days=1)
+        question = Question(pub_date=timezone.now(), end_date=future_end_date)
+        self.assertTrue(question.can_vote())
+
+    def test_cannot_vote_before_pub_date(self):
+        """
+        Cannot vote if the current time is before the pub_date.
+        """
+        future_pub_date = timezone.now() + datetime.timedelta(days=1)
+        question = Question(pub_date=future_pub_date, end_date=future_pub_date + datetime.timedelta(days=1))
+        self.assertFalse(question.can_vote())
+
 
 def create_question(question_text, days):
     """
@@ -122,3 +177,22 @@ class QuestionIndexViewTests(TestCase):
             url = reverse('polls:detail', args=(past_question.id,))
             response = self.client.get(url)
             self.assertContains(response, past_question.question_text)
+
+    def test_redirect_when_voting_not_allowed(self):
+        """
+           Test case for verifying redirection behavior when accessing a poll's detail page.
+
+           - Creates a test question that isn't published and disallows voting.
+           - Checks if the response redirects to the polls index when expected.
+           - Verifies a 404 status code when the question doesn't exist.
+
+        """
+        question = Question.objects.create(
+            question_text="Test Question",
+            pub_date=timezone.now() + timezone.timedelta(days=1),
+        )
+        response = self.client.get(reverse('polls:detail', args=(question.id,)))
+        if question.is_published() and not question.can_vote():
+            self.assertRedirects(response, reverse('polls:index'))
+        else:
+            self.assertEqual(response.status_code, 404)
