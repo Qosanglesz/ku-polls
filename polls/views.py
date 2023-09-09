@@ -1,6 +1,12 @@
-from django.http import HttpResponse, HttpResponseRedirect
+"""
+Module for defining views related to polls.
+
+This module contains Django views for handling poll-related functionality,
+including voting, displaying poll details, and showing poll results.
+"""
+from django.http import Http404, HttpResponseRedirect
 from .models import Choice, Question
-from django.shortcuts import get_object_or_404, render
+from django.shortcuts import render
 from django.urls import reverse
 from django.views import generic
 from django.utils import timezone
@@ -8,6 +14,16 @@ from django.contrib import messages
 
 
 def vote(request, question_id):
+    """
+    Record a vote for a specific question and handle the redirection.
+
+    Args:
+        request (HttpRequest): The HTTP request object.
+        question_id (int): The ID of the question to vote on.
+
+    Returns:
+        HttpResponseRedirect: Redirects to the results page after the vote is recorded.
+    """
     try:
         question = Question.objects.get(pk=question_id)
     except Question.DoesNotExist:
@@ -40,28 +56,29 @@ def vote(request, question_id):
 
 
 class IndexView(generic.ListView):
+    """View for displaying the list of latest published questions."""
+
     template_name = 'polls/index.html'
     context_object_name = 'latest_question_list'
 
     def get_queryset(self):
-        """
-        Return the last five published questions (not including those set to be
-        published in the future).
-        """
+        """Return the last five published questions (not including those set to bepublished in the future)."""
         return Question.objects.filter(pub_date__lte=timezone.now()).order_by('-pub_date')[:5]
 
 
 class DetailView(generic.DetailView):
+    """View for displaying the details of a specific question."""
+
     model = Question
     template_name = 'polls/detail.html'
 
     def get_queryset(self):
-        """
-        Excludes any questions that aren't published yet.
-        """
+        """Excludes any questions that aren't published yet."""
         return Question.objects.filter(pub_date__lte=timezone.now())
 
 
 class ResultsView(generic.DetailView):
+    """View for displaying the results of a specific question."""
+
     model = Question
     template_name = 'polls/results.html'
