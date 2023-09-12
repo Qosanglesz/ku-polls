@@ -6,13 +6,14 @@ including voting, displaying poll details, and showing poll results.
 """
 from django.http import Http404, HttpResponseRedirect
 from .models import Choice, Question
-from django.shortcuts import render
+from django.shortcuts import redirect, render
 from django.urls import reverse
 from django.views import generic
 from django.utils import timezone
 from django.contrib import messages
+from django.contrib.auth.decorators import login_required
 
-
+@login_required
 def vote(request, question_id):
     """
     Record a vote for a specific question and handle the redirection.
@@ -24,6 +25,8 @@ def vote(request, question_id):
     Returns:
         HttpResponseRedirect: Redirects to the results page after the vote is recorded.
     """
+    if not request.user.is_authenticated():
+        redirect("login")
     try:
         question = Question.objects.get(pk=question_id)
     except Question.DoesNotExist:

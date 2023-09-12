@@ -103,7 +103,7 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 # where to redirect after login and logout.
 LOGIN_REDIRECT_URL = 'polls:index'    # after login, show list of polls
-LOGOUT_REDIRECT_URL = 'login'         # after logout, direct to where?
+LOGOUT_REDIRECT_URL = 'polls:index'        # after logout, direct to where?
 
 # Internationalization
 # https://docs.djangoproject.com/en/4.2/topics/i18n/
