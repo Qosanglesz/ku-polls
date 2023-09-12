@@ -5,7 +5,7 @@ This module contains Django views for handling poll-related functionality,
 including voting, displaying poll details, and showing poll results.
 """
 from django.http import Http404, HttpResponseRedirect
-from .models import Choice, Question
+from .models import Choice, Question, Vote
 from django.shortcuts import redirect, render
 from django.urls import reverse
 from django.views import generic
@@ -53,9 +53,21 @@ def vote(request, question_id):
             messages.error(request, "Voting for this question is not allowed at the moment.")
             return HttpResponseRedirect(reverse('polls:index'))
 
-        selected_choice.votes += 1
-        selected_choice.save()
-        return HttpResponseRedirect(reverse('polls:results', args=(question.id,)))
+    #selected_choice.votes += 1
+    #selected_choice.save()
+    this_user = request.user
+    try:
+        # find a vote for this user and this question
+        vote = Vote.objects.get(user=this_user, choice__question=question)
+        # update a choice
+        vote.choice = selected_choice
+    except Vote.DoesNotExist:
+        # No mathch vote = create a new Vote
+        vote = Vote(user=this_user, Choice=selected_choice)
+    vote.save()
+    # TODO: use massages to display a confirmation on the result page
+    
+    return HttpResponseRedirect(reverse('polls:results', args=(question.id,)))
 
 
 class IndexView(generic.ListView):
