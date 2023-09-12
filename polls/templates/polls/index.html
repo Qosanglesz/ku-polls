@@ -1,6 +1,11 @@
 {% load static %}
 <link rel="stylesheet" href="{% static 'polls/style.css' %}">
 
+{%if user.is_authenticated%}
+        <p>Welcome back, {{user.username.title}}</p>
+    {%else%}
+        <p>Please <a href="{% url 'login' %}"></a> login to vote!</p>
+    {%endif%}
 <div id="Webname" class="Header" style="background-color: #333; color: white; padding: 20px; text-align: center;">
     <h1 style="font-size: 48px; margin: 0;">KU Polls</h1>
     <p style="font-size: 24px; margin-top: 10px;">KU Polls - Kasetsart University's Polls</p>
