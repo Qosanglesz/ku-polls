@@ -25,8 +25,8 @@ def vote(request, question_id):
     Returns:
         HttpResponseRedirect: Redirects to the results page after the vote is recorded.
     """
-    if not request.user.is_authenticated():
-        redirect("login")
+    if not request.user.is_authenticated:
+        return redirect("login")
     try:
         question = Question.objects.get(pk=question_id)
     except Question.DoesNotExist:
@@ -63,7 +63,7 @@ def vote(request, question_id):
         vote.choice = selected_choice
     except Vote.DoesNotExist:
         # No mathch vote = create a new Vote
-        vote = Vote(user=this_user, Choice=selected_choice)
+        vote = Vote(user=this_user, choice=selected_choice)
     vote.save()
     # TODO: use massages to display a confirmation on the result page
     
