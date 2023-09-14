@@ -3,6 +3,9 @@ from django.test import TestCase
 from django.utils import timezone
 from .models import Question
 from django.urls import reverse
+from .models import Question, Choice
+from django.contrib.auth.models import User
+from django.contrib.auth import authenticate
 
 
 class QuestionModelTests(TestCase):
@@ -196,3 +199,59 @@ class QuestionIndexViewTests(TestCase):
             self.assertRedirects(response, reverse('polls:index'))
         else:
             self.assertEqual(response.status_code, 404)
+
+
+class AuthenticationTestCase(TestCase):
+    def setUp(self):
+        self.username = 'Vader'
+        self.password = '@Iamyourfater'
+        self.user = User.objects.create_user(username=self.username, password=self.password)
+
+    def test_login(self):
+        response = self.client.post(reverse('login'), {'username': self.username, 'password': self.password})
+        self.assertEqual(response.status_code, 302)
+        self.assertTrue(response.wsgi_request.user.is_authenticated)
+
+    def test_logout(self):
+        self.client.login(username=self.username, password=self.password)
+        response = self.client.get(reverse('logout'))
+        self.assertEqual(response.status_code, 302)
+        self.assertFalse(response.wsgi_request.user.is_authenticated)
+
+
+class VoteAuthenticationTestCase(TestCase):
+    def setUp(self):
+        self.username = 'Vader'
+        self.password = '@Iamyourfater'
+        self.user = User.objects.create_user(username=self.username, password=self.password)
+        self.question = Question.objects.create(question_text='Test Question')
+        self.choice1 = Choice.objects.create(question=self.question, choice_text='Choice 1')
+        self.choice2 = Choice.objects.create(question=self.question, choice_text='Choice 2')
+
+    def test_vote_authentication(self):
+        response = self.client.post(reverse('polls:vote', args=(self.question.id,)), {'choice': self.choice1.id})
+        self.assertEqual(response.status_code, 302)
+        user = authenticate(username=self.username, password=self.password)
+        self.client.login(username=self.username, password=self.password)
+        response = self.client.post(reverse('polls:vote', args=(self.question.id,)), {'choice': self.choice1.id})
+        self.assertIn(response.status_code, [200, 302])
+
+    def test_change_vote_authentication(self):
+        user = authenticate(username=self.username, password=self.password)
+        self.client.login(username=self.username, password=self.password)
+        response = self.client.post(reverse('polls:vote', args=(self.question.id,)), {'choice': self.choice1.id})
+        self.assertIn(response.status_code, [200, 302])
+        response = self.client.post(reverse('polls:vote', args=(self.question.id,)), {'choice': self.choice2.id})
+        self.assertIn(response.status_code, [200, 302])
+
+    def test_change_vote_unauthenticated(self):
+        response = self.client.post(reverse('polls:vote', args=(self.question.id,)), {'choice': self.choice1.id})
+        self.assertEqual(response.status_code, 302)
+
+    def test_one_vote_per_poll(self):
+        user = authenticate(username=self.username, password=self.password)
+        self.client.login(username=self.username, password=self.password)
+        response1 = self.client.post(reverse('polls:vote', args=(self.question.id,)), {'choice': self.choice1.id})
+        self.assertIn(response1.status_code, [200, 302])
+        response2 = self.client.post(reverse('polls:vote', args=(self.question.id,)), {'choice': self.choice1.id})
+        self.assertEqual(response2.status_code, 302)
