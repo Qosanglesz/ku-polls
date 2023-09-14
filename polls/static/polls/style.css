@@ -73,7 +73,7 @@ ul {
 .table-container {
     display: flex;
     align-items: center;
-    height: 20vh;
+    height: 25vh;
 }
 
 table {
@@ -84,6 +84,7 @@ table {
     text-align: center;
     border-collapse: collapse;
     border: 5px solid white;
+    margin: 0 auto;
 }
 
 .result-button {

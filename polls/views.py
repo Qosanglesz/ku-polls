@@ -61,11 +61,14 @@ def vote(request, question_id):
         vote = Vote.objects.get(user=this_user, choice__question=question)
         # update a choice
         vote.choice = selected_choice
+        vote.save()
     except Vote.DoesNotExist:
         # No mathch vote = create a new Vote
         vote = Vote(user=this_user, choice=selected_choice)
-    vote.save()
-    # TODO: use massages to display a confirmation on the result page
+        vote.save()
+        
+    # Display a success message
+    messages.success(request, "Your vote has been recorded successfully.")
     
     return HttpResponseRedirect(reverse('polls:results', args=(question.id,)))
 
