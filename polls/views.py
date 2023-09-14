@@ -13,6 +13,7 @@ from django.utils import timezone
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 
+
 @login_required
 def vote(request, question_id):
     """
@@ -66,7 +67,7 @@ def vote(request, question_id):
         # No mathch vote = create a new Vote
         vote = Vote(user=this_user, choice=selected_choice)
         vote.save()
-        
+
     # Display a success message
     messages.success(request, "Your vote has been recorded successfully.")
     
@@ -93,6 +94,22 @@ class DetailView(generic.DetailView):
     def get_queryset(self):
         """Excludes any questions that aren't published yet."""
         return Question.objects.filter(pub_date__lte=timezone.now())
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        user_vote = None
+
+        if self.request.user.is_authenticated:
+            try:
+                # Get the user's previous vote for this question
+                user_vote = Vote.objects.get(user=self.request.user, choice__question=self.object)
+            except Vote.DoesNotExist:
+                pass
+
+        context['error_message'] = None
+        context['user_vote'] = user_vote
+
+        return context
 
 
 class ResultsView(generic.DetailView):
