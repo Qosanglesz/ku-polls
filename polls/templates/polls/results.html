@@ -5,7 +5,7 @@
     <p style="font-size: 24px; margin-top: 10px;">KU Polls - Kasetsart University's Polls</p>
     <div style="margin-top: 20px;">
         <a href="{% url 'polls:index'%}" class="Tablink" id="HomeLink" style="background-color: #555; color: white; padding: 10px 20px; border: none; border-radius: 5px; margin-right: 10px; cursor: pointer;">Home</a>
-        <a href="#" class="Tablink" id="AdminLink" style="background-color: #555; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer;">Admin</a>
+        <a href="{% url 'admin:index' %}" class="Tablink" id="AdminLink" style="background-color: #555; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer;">Admin</a>
     </div>
 </div>
 <h1 style="color: white;" class="questionResult">

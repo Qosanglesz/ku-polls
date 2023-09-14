@@ -45,7 +45,7 @@ def vote(request, question_id):
     else:
         # Check if the end date has passed
         if question.end_date and timezone.now() > question.end_date:
-            messages.error(request, "Voting for this question is not allowed as the end date has passed.")
+            messages.error(request, 'Voting for this question is not allowed as the end date has passed.')
             return HttpResponseRedirect(reverse('polls:index'))
 
         # Check if voting is allowed for this question
