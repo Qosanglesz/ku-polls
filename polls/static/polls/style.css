@@ -101,3 +101,48 @@ table {
     background-color: white;
 }
 
+.user-info {
+    background-color: white;
+    color: #333;
+    padding: 10px;
+    text-align: center;
+    font-size: 22px;
+}
+
+.user-info .username {
+    font-weight: bold;
+}
+
+.user-info .logout-link {
+    color: #ff5733;
+    text-decoration: none;
+    margin-left: 10px;
+    font-size: 22px;
+}
+
+.user-info .logout-link:hover {
+    text-decoration: underline;
+}
+
+.login-signup {
+    text-align: center;
+    background-color: white;
+    padding: 10px;
+}
+
+.login-signup p {
+    color: #333;
+    font-size: 22px;
+}
+
+.login-signup .login-link,
+.login-signup .signup-link {
+    color: #007bff;
+    text-decoration: none;
+    font-size: 22px;
+}
+
+.login-signup .login-link:hover,
+.login-signup .signup-link:hover {
+    text-decoration: underline;
+}

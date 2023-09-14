@@ -1,5 +1,16 @@
 {% load static %}
 <link rel="stylesheet" href="{% static 'polls/style.css' %}">
+
+{% if user.is_authenticated %}
+    <div class="user-info">
+        Your are logged in with: <span class="username">{{ user.username }}</span> <a class="logout-link" href="{% url 'logout' %}?next={{request.path}}">Logout</a>
+    </div>
+{% else %}
+    <div class="login-signup">
+        <p>Please <a class="login-link" href="{% url 'login' %}?next={{request.path}}">Login</a> or <a class="signup-link" href="{% url 'signup' %}?next={{request.path}}">Sign up</a></p>
+    </div>
+{% endif %}
+
 <div id="Webname" class="Header" style="background-color: #333; color: white; padding: 20px; text-align: center;">
     <h1 style="font-size: 48px; margin: 0;">KU Polls</h1>
     <p style="font-size: 24px; margin-top: 10px;">KU Polls - Kasetsart University's Polls</p>
