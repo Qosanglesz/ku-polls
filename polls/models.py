@@ -37,7 +37,6 @@ class Choice(models.Model):
 
     question = models.ForeignKey(Question, on_delete=models.CASCADE)
     choice_text = models.CharField(max_length=200)
-    # votes = models.IntegerField(default=0)
 
     def __str__(self):
         """Returns a human-readable string representation of the choice."""
@@ -48,6 +47,7 @@ class Choice(models.Model):
         """Return the number of votes for this choice."""
         count = Vote.objects.filter(choice=self).count()
         return count
+
 
 class Vote(models.Model):
     """Records a Vote of a Choice by a User"""

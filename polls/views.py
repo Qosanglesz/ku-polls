@@ -54,8 +54,6 @@ def vote(request, question_id):
             messages.error(request, "Voting for this question is not allowed at the moment.")
             return HttpResponseRedirect(reverse('polls:index'))
 
-    #selected_choice.votes += 1
-    #selected_choice.save()
     this_user = request.user
     try:
         # find a vote for this user and this question
@@ -64,13 +62,12 @@ def vote(request, question_id):
         vote.choice = selected_choice
         vote.save()
     except Vote.DoesNotExist:
-        # No mathch vote = create a new Vote
+        # No match vote = create a new Vote
         vote = Vote(user=this_user, choice=selected_choice)
         vote.save()
 
     # Display a success message
     messages.success(request, "Your vote has been recorded successfully.")
-    
     return HttpResponseRedirect(reverse('polls:results', args=(question.id,)))
 
 
@@ -81,7 +78,7 @@ class IndexView(generic.ListView):
     context_object_name = 'latest_question_list'
 
     def get_queryset(self):
-        """Return the last five published questions (not including those set to bepublished in the future)."""
+        """Return the last five published questions (not including those set to republished in the future)."""
         return Question.objects.filter(pub_date__lte=timezone.now()).order_by('-pub_date')[:5]
 
 
@@ -94,7 +91,7 @@ class DetailView(generic.DetailView):
     def get_queryset(self):
         """Excludes any questions that aren't published yet."""
         return Question.objects.filter(pub_date__lte=timezone.now())
-    
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         user_vote = None
@@ -108,7 +105,6 @@ class DetailView(generic.DetailView):
 
         context['error_message'] = None
         context['user_vote'] = user_vote
-
         return context
 
 
