@@ -67,7 +67,7 @@ def vote(request, question_id):
         vote.save()
 
     # Display a success message
-    messages.success(request, "Your vote has been recorded successfully.")
+    messages.success(request, f"Your vote for '{question.question_text}' has been recorded successfully.")
     return HttpResponseRedirect(reverse('polls:results', args=(question.id,)))
 
 
@@ -93,6 +93,7 @@ class DetailView(generic.DetailView):
         return Question.objects.filter(pub_date__lte=timezone.now())
 
     def get_context_data(self, **kwargs):
+        """Retrieves and prepares context data for rendering a template."""
         context = super().get_context_data(**kwargs)
         user_vote = None
 
