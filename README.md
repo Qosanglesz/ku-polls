@@ -32,9 +32,14 @@ https://cpske.github.io/ISP) course at Kasetsart University.
     ```
 6.  Mygrate and loading data
     ```
+    # Step 1 migrate.
     python manage.py migrate
-    python manage.py loaddata data/polls.json
+
+    # Step 2 load user data.
     python manage.py loaddata data/users.json
+
+    # Step 3 load polls data.
+    python manage.py loaddata data/polls.json
     ```
 7.  Runserver
     ```
@@ -59,6 +64,7 @@ All project documents are in the [Project Wiki](../../wiki/Home).
 
 - [Vision Statement](../../wiki/Vision%20Statement)
 - [Requirements](../../wiki/Requirements)
+- [Domain Model](https://github.com/Qosanglesz/ku-polls/wiki/Domain-Model)
 - [Development plan](https://github.com/Qosanglesz/ku-polls/wiki/Development-Plan)
 - [Iteration 1](https://github.com/Qosanglesz/ku-polls/wiki/Iteration-1-Plan)
 - [Iteration 2](https://github.com/Qosanglesz/ku-polls/wiki/Iteration-2-Plan)
