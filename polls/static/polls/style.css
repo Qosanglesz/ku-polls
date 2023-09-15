@@ -73,7 +73,7 @@ ul {
 .table-container {
     display: flex;
     align-items: center;
-    height: 25vh;
+    height: 30h;
 }
 
 table {
@@ -146,4 +146,27 @@ table {
 .login-signup .login-link:hover,
 .login-signup .signup-link:hover {
     text-decoration: underline;
+}
+
+/* Use class selectors, not ID selectors */
+.vote-status.status-open {
+    background-color: rgb(119, 221, 119);
+    color: black;
+    border: 1px solid #333;
+    padding: 5; 
+    text-decoration: none; 
+    border-radius: 5px; 
+    margin-left: 10px;
+    float: right;
+}
+
+.vote-status.status-close {
+    background-color: rgb(244,13,48);
+    color: black;
+    border: 1px solid #333;
+    padding: 5; 
+    text-decoration: none; 
+    border-radius: 5px; 
+    margin-left: 10px;
+    float: right;
 }
