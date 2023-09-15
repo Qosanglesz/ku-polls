@@ -53,4 +53,3 @@ class Vote(models.Model):
     """Records a Vote of a Choice by a User"""
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     choice = models.ForeignKey(Choice, on_delete=models.CASCADE)
-    
