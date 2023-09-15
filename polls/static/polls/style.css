@@ -73,7 +73,7 @@ ul {
 .table-container {
     display: flex;
     align-items: center;
-    height: 20vh;
+    height: 30h;
 }
 
 table {
@@ -84,6 +84,7 @@ table {
     text-align: center;
     border-collapse: collapse;
     border: 5px solid white;
+    margin: 0 auto;
 }
 
 .result-button {
@@ -101,3 +102,71 @@ table {
     background-color: white;
 }
 
+.user-info {
+    background-color: white;
+    color: #333;
+    padding: 10px;
+    text-align: center;
+    font-size: 22px;
+}
+
+.user-info .username {
+    font-weight: bold;
+}
+
+.user-info .logout-link {
+    color: #ff5733;
+    text-decoration: none;
+    margin-left: 10px;
+    font-size: 22px;
+}
+
+.user-info .logout-link:hover {
+    text-decoration: underline;
+}
+
+.login-signup {
+    text-align: center;
+    background-color: white;
+    padding: 10px;
+}
+
+.login-signup p {
+    color: #333;
+    font-size: 22px;
+}
+
+.login-signup .login-link,
+.login-signup .signup-link {
+    color: #007bff;
+    text-decoration: none;
+    font-size: 22px;
+}
+
+.login-signup .login-link:hover,
+.login-signup .signup-link:hover {
+    text-decoration: underline;
+}
+
+/* Use class selectors, not ID selectors */
+.vote-status.status-open {
+    background-color: rgb(119, 221, 119);
+    color: black;
+    border: 1px solid #333;
+    padding: 5; 
+    text-decoration: none; 
+    border-radius: 5px; 
+    margin-left: 10px;
+    float: right;
+}
+
+.vote-status.status-close {
+    background-color: rgb(244,13,48);
+    color: black;
+    border: 1px solid #333;
+    padding: 5; 
+    text-decoration: none; 
+    border-radius: 5px; 
+    margin-left: 10px;
+    float: right;
+}

@@ -5,14 +5,16 @@ This module contains Django views for handling poll-related functionality,
 including voting, displaying poll details, and showing poll results.
 """
 from django.http import Http404, HttpResponseRedirect
-from .models import Choice, Question
-from django.shortcuts import render
+from .models import Choice, Question, Vote
+from django.shortcuts import redirect, render
 from django.urls import reverse
 from django.views import generic
 from django.utils import timezone
 from django.contrib import messages
+from django.contrib.auth.decorators import login_required
 
 
+@login_required
 def vote(request, question_id):
     """
     Record a vote for a specific question and handle the redirection.
@@ -24,6 +26,8 @@ def vote(request, question_id):
     Returns:
         HttpResponseRedirect: Redirects to the results page after the vote is recorded.
     """
+    if not request.user.is_authenticated:
+        return redirect("login")
     try:
         question = Question.objects.get(pk=question_id)
     except Question.DoesNotExist:
@@ -42,7 +46,7 @@ def vote(request, question_id):
     else:
         # Check if the end date has passed
         if question.end_date and timezone.now() > question.end_date:
-            messages.error(request, "Voting for this question is not allowed as the end date has passed.")
+            messages.error(request, 'Voting for this question is not allowed as the end date has passed.')
             return HttpResponseRedirect(reverse('polls:index'))
 
         # Check if voting is allowed for this question
@@ -50,9 +54,21 @@ def vote(request, question_id):
             messages.error(request, "Voting for this question is not allowed at the moment.")
             return HttpResponseRedirect(reverse('polls:index'))
 
-        selected_choice.votes += 1
-        selected_choice.save()
-        return HttpResponseRedirect(reverse('polls:results', args=(question.id,)))
+    this_user = request.user
+    try:
+        # find a vote for this user and this question
+        vote = Vote.objects.get(user=this_user, choice__question=question)
+        # update a choice
+        vote.choice = selected_choice
+        vote.save()
+    except Vote.DoesNotExist:
+        # No match vote = create a new Vote
+        vote = Vote(user=this_user, choice=selected_choice)
+        vote.save()
+
+    # Display a success message
+    messages.success(request, f"Your vote for '{question.question_text}' has been recorded successfully.")
+    return HttpResponseRedirect(reverse('polls:results', args=(question.id,)))
 
 
 class IndexView(generic.ListView):
@@ -62,7 +78,7 @@ class IndexView(generic.ListView):
     context_object_name = 'latest_question_list'
 
     def get_queryset(self):
-        """Return the last five published questions (not including those set to bepublished in the future)."""
+        """Return the last five published questions (not including those set to republished in the future)."""
         return Question.objects.filter(pub_date__lte=timezone.now()).order_by('-pub_date')[:5]
 
 
@@ -75,6 +91,22 @@ class DetailView(generic.DetailView):
     def get_queryset(self):
         """Excludes any questions that aren't published yet."""
         return Question.objects.filter(pub_date__lte=timezone.now())
+
+    def get_context_data(self, **kwargs):
+        """Retrieves and prepares context data for rendering a template."""
+        context = super().get_context_data(**kwargs)
+        user_vote = None
+
+        if self.request.user.is_authenticated:
+            try:
+                # Get the user's previous vote for this question
+                user_vote = Vote.objects.get(user=self.request.user, choice__question=self.object)
+            except Vote.DoesNotExist:
+                pass
+
+        context['error_message'] = None
+        context['user_vote'] = user_vote
+        return context
 
 
 class ResultsView(generic.DetailView):

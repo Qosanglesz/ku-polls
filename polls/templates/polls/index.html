@@ -1,22 +1,32 @@
 {% load static %}
 <link rel="stylesheet" href="{% static 'polls/style.css' %}">
 
+{% if user.is_authenticated %}
+    <div class="user-info">
+        Your are logged in with: <span class="username">{{ user.username }}</span> <a class="logout-link" href="{% url 'logout' %}?next={{request.path}}">Logout</a>
+    </div>
+{% else %}
+    <div class="login-signup">
+        <p>Please <a class="login-link" href="{% url 'login' %}?next={{request.path}}">Login</a> or <a class="signup-link" href="{% url 'signup' %}?next={{request.path}}">Sign up</a></p>
+    </div>
+{% endif %}
+
 <div id="Webname" class="Header" style="background-color: #333; color: white; padding: 20px; text-align: center;">
     <h1 style="font-size: 48px; margin: 0;">KU Polls</h1>
     <p style="font-size: 24px; margin-top: 10px;">KU Polls - Kasetsart University's Polls</p>
     <div style="margin-top: 20px;">
         <a href="{% url 'polls:index'%}" class="Tablink" id="HomeLink" style="background-color: #555; color: white; padding: 10px 20px; border: none; border-radius: 5px; margin-right: 10px; cursor: pointer;">Home</a>
-        <a href="#" class="Tablink" id="AdminLink" style="background-color: #555; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer;">Admin</a>
+        <a href="{% url 'admin:index' %}" class="Tablink" id="AdminLink" style="background-color: #555; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer;">Admin</a>
     </div>
 </div>
 
-<div id="messages">
+<div id="messages" style="font-size: 25px; text-align: center;">
     {% if messages %}
-        <ul class="messages">
+        <p class="messages">
             {% for message in messages %}
-                <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+                <p {% if message.tags %} class="{{ message.tags }}"{% endif %} style="background-color: rgb(244,13,48);">{{ message }}</p>
             {% endfor %}
-        </ul>
+        </p>
     {% endif %}
 </div>
 
@@ -26,10 +36,15 @@
 
 {% if latest_question_list %}
     <ul>
-    {% for question in latest_question_list %}
+        {% for question in latest_question_list %}
         <li>
             <a href="{% url 'polls:detail' question.id %}">{{ question.question_text }}</a>
             <a href="{% url 'polls:results' question.id %}" class="result-button">Result</a>
+            {% if question.can_vote %}
+                <span class="vote-status status-open">Open</span>
+            {% else %}
+                <span class="vote-status status-close">Closed</span>
+            {% endif %}
             <div style="clear: both;"></div>
         </li>
     {% endfor %}
