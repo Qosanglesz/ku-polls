@@ -94,4 +94,4 @@ All project documents are in the [Project Wiki](../../wiki/Home).
 - [Iteration 4](https://github.com/Qosanglesz/ku-polls/wiki/Iteration-4-Plan)
 - [Task](https://github.com/users/Qosanglesz/projects/1/views/2)
 
-[django-tutorial]: TODO-write-the-django-tutorial-URL-here
+[Django-Tutorial](https://docs.djangoproject.com/en/4.2/intro/tutorial01/)
