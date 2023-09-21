@@ -4,7 +4,6 @@ from django.utils import timezone
 from django.urls import reverse
 from .models import Question, Choice
 from django.contrib.auth.models import User
-from django.contrib.auth import authenticate
 
 
 class QuestionModelTests(TestCase):
@@ -74,7 +73,7 @@ class QuestionModelTests(TestCase):
         """
         question = Question(pub_date=timezone.now(), end_date=None)
         self.assertTrue(question.can_vote())
- 
+
     def test_can_vote_with_end_date_in_future(self):
         """
         can_vote() should return True for questions with an end_date in the future.
@@ -253,7 +252,6 @@ class VoteAuthenticationTestCase(TestCase):
         """
         response = self.client.post(reverse('polls:vote', args=(self.question.id,)), {'choice': self.choice1.id})
         self.assertEqual(response.status_code, 302)
-        user = authenticate(username=self.username, password=self.password)
         self.client.login(username=self.username, password=self.password)
         response = self.client.post(reverse('polls:vote', args=(self.question.id,)), {'choice': self.choice1.id})
         self.assertIn(response.status_code, [200, 302])
@@ -262,7 +260,6 @@ class VoteAuthenticationTestCase(TestCase):
         """
         Test changing a vote with user authentication.
         """
-        user = authenticate(username=self.username, password=self.password)
         self.client.login(username=self.username, password=self.password)
         response = self.client.post(reverse('polls:vote', args=(self.question.id,)), {'choice': self.choice1.id})
         self.assertIn(response.status_code, [200, 302])
@@ -280,7 +277,6 @@ class VoteAuthenticationTestCase(TestCase):
         """
         Test allowing only one vote per poll for a user.
         """
-        user = authenticate(username=self.username, password=self.password)
         self.client.login(username=self.username, password=self.password)
         response1 = self.client.post(reverse('polls:vote', args=(self.question.id,)), {'choice': self.choice1.id})
         self.assertIn(response1.status_code, [200, 302])

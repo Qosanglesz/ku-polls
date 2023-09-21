@@ -41,7 +41,7 @@ class Choice(models.Model):
     def __str__(self):
         """Returns a human-readable string representation of the choice."""
         return self.choice_text
-    
+
     @property
     def votes(self):
         """Return the number of votes for this choice."""
