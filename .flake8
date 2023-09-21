@@ -1,0 +1,12 @@
+[flake8]
+max-line-length = 120
+exclude=
+    migrations
+    mysite
+    logs
+    .venv
+    apps.py
+    setup.py
+per-file-ignores =
+    .\polls\tests\test_sentiment_model.py: E501
+    .\polls\models.py: F811
