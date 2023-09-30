@@ -92,6 +92,12 @@ class DetailView(generic.DetailView):
         """Excludes any questions that aren't published yet."""
         return Question.objects.filter(pub_date__lte=timezone.now())
 
+    def dispatch(self, request, *args, **kwargs):
+        # Check if the user is authenticated, and if not, redirect to the login page.
+        if not request.user.is_authenticated:
+            return redirect("login")
+        return super().dispatch(request, *args, **kwargs)
+
     def get_context_data(self, **kwargs):
         """Retrieves and prepares context data for rendering a template."""
         context = super().get_context_data(**kwargs)

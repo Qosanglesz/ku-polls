@@ -205,6 +205,46 @@
   }
 },
 {
+  "model": "polls.choice",
+  "pk": 21,
+  "fields": {
+    "question": 1,
+    "choice_text": "others"
+  }
+},
+{
+  "model": "polls.choice",
+  "pk": 22,
+  "fields": {
+    "question": 2,
+    "choice_text": "others"
+  }
+},
+{
+  "model": "polls.choice",
+  "pk": 23,
+  "fields": {
+    "question": 3,
+    "choice_text": "others"
+  }
+},
+{
+  "model": "polls.choice",
+  "pk": 24,
+  "fields": {
+    "question": 4,
+    "choice_text": "others"
+  }
+},
+{
+  "model": "polls.choice",
+  "pk": 25,
+  "fields": {
+    "question": 5,
+    "choice_text": "others"
+  }
+},
+{
   "model": "polls.vote",
   "pk": 1,
   "fields": {
